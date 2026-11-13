@@ -2,11 +2,17 @@
 
 Games.cases = (() => {
   /* Каталог подарков: m = предмет с рынка (можно продать дорого) */
-  const G = (e, n, v, m) => ({ e, n, v, m: !!m });
+  const G = (e, n, v, m, a) => ({ e, n, v, m: !!m, a: a || null });
+
+  function artHTML(g, cls) {
+    return g.a
+      ? '<svg class="gi-art ' + cls + '"><use href="#' + g.a + '"/></svg>'
+      : '<span class="' + cls + '">' + g.e + '</span>';
+  }
 
   const GIFTS = {
     heart: G('💝', 'Сердечко', 15),
-    bear: G('🧸', 'Мишка', 15),
+    bear: G('🧸', 'Мишка', 15, false, 'g-bear'),
     gift: G('🎁', 'Подарок', 25),
     rose: G('🌹', 'Роза', 25),
     cake: G('🎂', 'Торт', 50),
@@ -23,7 +29,7 @@ Games.cases = (() => {
     hammer: G('🔨', 'Молот', 438, true),
     flamingo: G('🦩', 'Фламинго', 460, true),
     cupcake: G('🧁', 'Капкейк', 460, true),
-    bday: G('🎈', 'Happy B-day', 536, true),
+    bday: G('🎈', 'Happy B-day', 536, true, 'g-balloons'),
     saber: G('🔦', 'Световой меч', 573, true),
     snake: G('🐍', 'Змея-2025', 434, true),
     jester: G('🃏', 'Шут', 480, true),
@@ -135,7 +141,7 @@ Games.cases = (() => {
 
   function stripItemHTML(g) {
     return '<div class="strip-item t-' + tier(g) + '">' + ribbon(g) +
-      '<span class="si-e">' + g.e + '</span>' +
+      artHTML(g, 'si-e') +
       '<div class="ginfo"><div class="gn">' + g.n + '</div>' +
       '<div class="gp"><i>★</i> ' + g.v + '</div></div></div>';
   }
@@ -163,7 +169,7 @@ Games.cases = (() => {
     grid.innerHTML = c.items.map((g, i) =>
       '<div class="drop-card d-' + tier(g) + '" style="animation-delay:' + (i * 0.04) + 's">' +
       ribbon(g) +
-      '<span class="dc-e">' + g.e + '</span>' +
+      artHTML(g, 'dc-e') +
       '<div class="ginfo"><div class="gn">' + g.n + '</div>' +
       '<div class="gp"><i>★</i> ' + g.v + '</div></div></div>').join('');
   }
@@ -246,7 +252,7 @@ Games.cases = (() => {
       result.innerHTML =
         '<div class="result-card">' +
         '<div class="drop-card d-' + tier(g) + '">' + ribbon(g) +
-        '<span class="dc-e">' + g.e + '</span>' +
+        artHTML(g, 'dc-e') +
         '<div class="ginfo"><div class="gn">' + g.n + '</div>' +
         '<div class="gp"><i>★</i> ' + g.v + '</div></div></div></div>' +
         '<div class="rc-actions">' +
@@ -272,7 +278,7 @@ Games.cases = (() => {
         '<div class="multi-grid">' +
         prizes.map((g, i) =>
           '<div class="multi-item d-' + tier(g) + '" style="animation-delay:' + (i * 0.08) + 's">' +
-          ribbon(g) + '<span class="ie">' + g.e + '</span>' +
+          ribbon(g) + artHTML(g, 'ie') +
           '<div class="ginfo"><div class="gn">' + g.n + '</div>' +
           '<div class="gp"><i>★</i> ' + g.v + '</div></div>').join('') +
         '</div>' +
