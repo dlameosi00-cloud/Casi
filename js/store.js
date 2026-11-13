@@ -5,6 +5,7 @@ const Store = {
   balance: 0,
   stats: { bets: 0, wins: 0, best: 0, xp: 0, history: [], staked: 0, won: 0 },
   inventory: [],
+  withdrawals: [],
   promoUsed: [],
   demoMode: false,
   demoBalance: 0,
@@ -51,9 +52,11 @@ const Store = {
       if (d.user.stats && d.user.stats.bets != null) {
         this.stats = Object.assign(this.stats, d.user.stats);
       }
+      if (!Array.isArray(d.user.inventory) && d.user.inventory) this.inventory = d.user.inventory;
       if (Array.isArray(d.user.inventory) && d.user.inventory.length && !this.inventory.length) {
         this.inventory = d.user.inventory;
       }
+      this.withdrawals = Array.isArray(d.withdrawals) ? d.withdrawals : [];
       this.render();
     }).catch(() => {});
   },
@@ -66,6 +69,29 @@ const Store = {
     }).then(r => r.json()).then(d => {
       if (d.ok) { this.balance = d.balance; this.render(); }
     }).catch(() => {});
+  },
+
+  /* ---------- вывод звёзд (заявка) ---------- */
+  requestWithdraw(amount) {
+    if (this.demoMode) return this.toast('В демо-режиме вывод недоступен');
+    if (!API_URL || !this.tg || !this.tg.initData) return this.toast('Открой мини-апп через бота, чтобы вывести');
+    amount = Math.floor(+amount || 0);
+    if (amount < 50) return this.toast('Минимум 50 ★ для вывода');
+    if (amount > this.balance) return this.toast('Недостаточно звёзд');
+    fetch(API_URL + '/api/withdraw', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ initData: this.tg.initData, amount })
+    }).then(r => r.json()).then(d => {
+      if (!d.ok) {
+        const msg = { min: 'Минимум 50 ★', funds: 'Недостаточно звёзд' }[d.error] || 'Ошибка, попробуй позже';
+        return this.toast('Ошибка: ' + msg);
+      }
+      this.balance = d.balance;
+      this.withdrawals = Array.isArray(d.withdrawals) ? d.withdrawals : this.withdrawals;
+      this.render();
+      this.toast('Заявка на ★ ' + amount + ' создана · статус: в обработке');
+    }).catch(() => this.toast('Ошибка соединения'));
   },
 
   save() {
@@ -214,7 +240,7 @@ const Store = {
     const db = document.getElementById('demo-banner');
     if (db) db.classList.toggle('show', this.demoMode);
     const dt = document.getElementById('btn-demo-toggle');
-    if (dt) dt.textContent = this.demoMode ? '⏹ Выключить демо' : '🎮 Включить демо-режим';
+    if (dt) dt.textContent = this.demoMode ? 'Выключить демо-режим' : 'Включить демо-режим';
 
     const s = this.stats;
     const rate = s.bets ? Math.round(s.wins / s.bets * 100) : 0;
@@ -246,6 +272,27 @@ const Store = {
     }
     this.renderHistory();
     this.renderInv();
+    this.renderWithdrawals();
+  },
+
+  renderWithdrawals() {
+    const box = document.getElementById('wd-list');
+    const sub = document.getElementById('wd-sub');
+    if (sub) sub.textContent = this.withdrawals.length
+      ? 'Заявок: ' + this.withdrawals.length
+      : 'Заявок нет';
+    if (!box) return;
+    if (!this.withdrawals.length) {
+      box.innerHTML = '<div class="wd-empty">Заявок пока нет — минимальный вывод 50 ★</div>';
+      return;
+    }
+    box.innerHTML = this.withdrawals.map(w =>
+      '<div class="wd-row">' +
+      '<div><div class="wd-amount">★ ' + w.amount + '</div>' +
+      '<div class="wd-date">' + this.timeAgo(w.ts) + '</div></div>' +
+      '<div class="wd-status">' + (w.status === 'pending' ? 'В обработке' : (w.status === 'done' ? 'Выплачено' : 'Отклонено')) + '</div>' +
+      '</div>'
+    ).join('');
   },
 
   renderInv() {
@@ -255,7 +302,7 @@ const Store = {
     const sum = this.inventory.reduce((s, i) => s + i.v, 0);
     if (sub) sub.textContent = this.inventory.length + ' предметов · ' + sum + ' ★';
     if (!this.inventory.length) {
-      grid.innerHTML = '<div class="inv-empty">Пусто — открой кейс, чтобы получить предметы 🎁</div>';
+      grid.innerHTML = '<div class="inv-empty">Пусто — открой кейс, чтобы получить предметы</div>';
       return;
     }
     grid.innerHTML = this.inventory.map((it, i) =>
@@ -263,7 +310,7 @@ const Store = {
       (it.m ? '<span class="market-ribbon">Маркет</span>' : '') +
       '<span class="ie">' + it.e + '</span>' +
       '<span class="price-pill">★ ' + it.v + '</span>' +
-      '<span class="ilock">🔒</span></div>'
+      '<span class="ilock"><svg viewBox="0 0 24 24"><use href="#ic-lock"/></svg></span></div>'
     ).join('');
     grid.querySelectorAll('.inv-item').forEach(el =>
       el.addEventListener('click', () => {
@@ -285,7 +332,7 @@ const Store = {
     if (!box) return;
     const h = this.stats.history || [];
     if (!h.length) {
-      box.innerHTML = '<div class="history-empty">Пока пусто — сыграй первую игру 🎮</div>';
+      box.innerHTML = '<div class="history-empty">Пока пусто — сыграй первую игру</div>';
       return;
     }
     box.innerHTML = h.map((r, i) => {
