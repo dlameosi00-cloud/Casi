@@ -38,8 +38,8 @@ Games.upgrade = (() => {
     const g = el('upg-gauge');
     if (g) {
       const half = c * 1.8;
-      g.style.setProperty('--ws', (180 - half) + 'deg');
-      g.style.setProperty('--we', (180 + half) + 'deg');
+      g.style.setProperty('--ws', (90 - half) + 'deg');
+      g.style.setProperty('--we', (90 + half) + 'deg');
     }
     const go = el('upg-go');
     if (go && !spinning) go.textContent = '⌃  Улучшить до ★ ' + target;
