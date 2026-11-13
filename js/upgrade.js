@@ -1,4 +1,4 @@
-/* upgrade.js — Апгрейдер в стиле RubUP: подарок → цель, шанс, колесо */
+/* upgrade.js — Апгрейдер v2: сектор выигрыша снизу, шанс под колесом */
 
 Games.upgrade = (() => {
   let bet = 50, mult = 2, spinning = false;
@@ -30,12 +30,19 @@ Games.upgrade = (() => {
     if (bv) bv.innerHTML = '<b>★ ' + bet + '</b>';
     const tv = el('upg-target-v');
     if (tv) tv.innerHTML = '<b>★ ' + target + '</b>';
+    const cv = el('upg-c-val');
+    if (cv) cv.innerHTML = '<b>★ ' + target + '</b>';
     const ch = el('upg-chance');
     if (ch) ch.textContent = c + '%';
+
     const g = el('upg-gauge');
-    if (g) g.style.setProperty('--win', (c * 3.6) + 'deg');
+    if (g) {
+      const half = c * 1.8;
+      g.style.setProperty('--ws', (180 - half) + 'deg');
+      g.style.setProperty('--we', (180 + half) + 'deg');
+    }
     const go = el('upg-go');
-    if (go && !spinning) go.textContent = 'Улучшить до ★ ' + target;
+    if (go && !spinning) go.textContent = '⌃  Улучшить до ★ ' + target;
     syncInput();
   }
 
@@ -57,7 +64,13 @@ Games.upgrade = (() => {
 
     const c = chance();
     const win = Math.random() * 100 < c;
-    const angle = Math.random() * 360;
+
+    /* стрелка визуально падает в свой сектор:
+       зелёный сектор по центру снизу (180°), вне его — тёмная зона */
+    const wHalf = c * 1.8;
+    let angle;
+    if (win) angle = 180 + (Math.random() * 2 - 1) * wHalf * 0.85;
+    else angle = (180 + wHalf + Math.random() * (360 - 2 * wHalf)) % 360;
 
     spinning = true;
     const btn = el('upg-go');
@@ -118,8 +131,10 @@ Games.upgrade = (() => {
       '<div class="upg-gauge" id="upg-gauge">' +
       '<div class="upg-ring"></div><div class="upg-ticks"></div>' +
       '<div class="upg-arrow" id="upg-arrow"></div>' +
-      '<div class="upg-center"><div class="upg-chance" id="upg-chance">0%</div>' +
-      '<div class="upg-chance-l">шанс</div></div></div>' +
+      '<div class="upg-center"><div class="upg-c-val" id="upg-c-val"><b>★ ' + (bet * mult) + '</b></div>' +
+      '<div class="upg-c-l">выигрыш</div></div></div>' +
+      '<div class="upg-chancerow"><span class="upg-chance" id="upg-chance">0%</span>' +
+      '<span class="upg-chance-l">шанс</span></div>' +
 
       '<div class="upg-selects">' +
       '<div class="upg-panel"><div class="upg-p-title">Ваш подарок</div>' +
@@ -143,7 +158,7 @@ Games.upgrade = (() => {
       [10, 50, 100, 500].map(v => '<button data-q="' + v + '">' + v + '</button>').join('') +
       '</div>' +
 
-      '<button class="upg-go" id="upg-go">Улучшить</button>' +
+      '<button class="upg-go" id="upg-go">⌃  Улучшить</button>' +
       '<div class="upg-note">Чем выше множитель — тем ниже шанс. Выигрыш зачисляется сразу.</div>' +
       '</div>';
 
