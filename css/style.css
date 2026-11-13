@@ -1712,7 +1712,7 @@ body {
 }
 .upg-ring {
   background:
-    conic-gradient(from -90deg,
+    conic-gradient(from 90deg,
       #20263c 0deg var(--ws),
       #2dd882 var(--ws) var(--we),
       #20263c var(--we) 360deg);
