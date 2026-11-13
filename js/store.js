@@ -103,7 +103,7 @@ const Store = {
   },
 
   addToInv(item) {
-    this.inventory.unshift({ e: item.e, n: item.n, v: item.v, r: item.r || 'common', m: item.m, t: Date.now() });
+    this.inventory.unshift({ e: item.e, n: item.n, v: item.v, r: item.r || 'common', m: item.m, a: item.a, d: this.demoMode ? 1 : 0, t: Date.now() });
     this.save(); this.render();
   },
 
@@ -130,7 +130,7 @@ const Store = {
   invite() {
     const link = 'https://t.me/share/url?url=' +
       encodeURIComponent('https://t.me/YourCasinoBot/app') +
-      '&text=' + encodeURIComponent('🎰 Заходи играть в Casino Stars!');
+      '&text=' + encodeURIComponent('🎰 Заходи играть в FarerUp!');
     if (this.tg) {
       try { this.tg.openTelegramLink(link); return; } catch (e) {}
     }
@@ -299,19 +299,29 @@ const Store = {
     const grid = document.getElementById('inv-grid');
     const sub = document.getElementById('inv-sub');
     if (!grid) return;
-    const sum = this.inventory.reduce((s, i) => s + i.v, 0);
-    if (sub) sub.textContent = this.inventory.length + ' предметов · ' + sum + ' ★';
-    if (!this.inventory.length) {
-      grid.innerHTML = '<div class="inv-empty">Пусто — открой кейс, чтобы получить предметы</div>';
+    const mode = this.demoMode ? 1 : 0;
+    const items = this.inventory
+      .map((it, i) => ({ it, i }))
+      .filter(x => (x.it.d ? 1 : 0) === mode);
+    const sum = items.reduce((s, x) => s + x.it.v, 0);
+    if (sub) sub.textContent = items.length + ' предметов · ' + sum + ' ★';
+    if (!items.length) {
+      grid.innerHTML = '<div class="inv-empty">' + (this.demoMode
+        ? 'Демо-инвентарь пуст — выигрыши в демо попадают сюда'
+        : 'Пусто — открой кейс, чтобы получить предметы') + '</div>';
       return;
     }
-    grid.innerHTML = this.inventory.map((it, i) =>
-      '<div class="inv-item r-' + it.r + '" data-i="' + i + '">' +
-      (it.m ? '<span class="market-ribbon">Маркет</span>' : '') +
-      '<span class="ie">' + it.e + '</span>' +
-      '<span class="price-pill">★ ' + it.v + '</span>' +
-      '<span class="ilock"><svg viewBox="0 0 24 24"><use href="#ic-lock"/></svg></span></div>'
-    ).join('');
+    grid.innerHTML = items.map(x => {
+      const it = x.it;
+      const art = it.a
+        ? '<svg class="gi-art inv"><use href="#' + it.a + '"/></svg>'
+        : '<span class="ie">' + it.e + '</span>';
+      return '<div class="inv-item r-' + it.r + '" data-i="' + x.i + '">' +
+        (it.m ? '<span class="market-ribbon">Маркет</span>' : '') +
+        art +
+        '<span class="price-pill">★ ' + it.v + '</span>' +
+        '<span class="ilock"><svg viewBox="0 0 24 24"><use href="#ic-lock"/></svg></span></div>';
+    }).join('');
     grid.querySelectorAll('.inv-item').forEach(el =>
       el.addEventListener('click', () => {
         if (el.querySelector('.isell')) return;
