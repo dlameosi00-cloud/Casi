@@ -1347,3 +1347,274 @@ body {
   white-space: nowrap;
 }
 .wd-empty { color: var(--dim); font-size: 13px; padding: 6px 0; }
+
+/* ===== UPGRADE 15: RubUP-стиль, кейсы-подарки, апгрейдер ===== */
+
+/* --- шапка --- */
+.btn-deposit-pill {
+  background: linear-gradient(120deg, #7b6bff, #5b46e0);
+  color: #fff; border: none; border-radius: 20px;
+  padding: 9px 16px; font-size: 13px; font-weight: 800; font-family: inherit;
+  box-shadow: 0 6px 18px rgba(108,92,255,.35), inset 0 1px 0 rgba(255,255,255,.25);
+  cursor: pointer; transition: transform .12s, filter .15s;
+}
+.btn-deposit-pill:active { transform: scale(.95); filter: brightness(1.1); }
+.balance-chip {
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+  padding: 8px 13px; font-size: 14px;
+}
+.balance-chip .star-ic { width: 14px; height: 14px; }
+
+/* --- карточки игр: витрина --- */
+.game-grid2 { gap: 12px; }
+.game-card {
+  min-height: 150px; border-radius: 22px; padding: 12px;
+  justify-content: flex-end; border: 1px solid rgba(255,255,255,.09);
+  box-shadow: 0 10px 26px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08);
+}
+.game-card::after {
+  width: 160px; height: 160px; right: -50px; top: -60px;
+  background: radial-gradient(circle, rgba(255,255,255,.16), transparent 65%);
+}
+.gc-art {
+  position: absolute; inset: 0 0 34px 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.gc-art .gart {
+  width: 92px; height: 92px;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.45));
+  transition: transform .25s ease;
+}
+.game-card:active .gart { transform: scale(1.08) rotate(-3deg); }
+.gc-name2 {
+  position: relative; z-index: 2;
+  font-size: 16px; font-weight: 800; letter-spacing: .2px;
+  text-shadow: 0 2px 10px rgba(0,0,0,.6);
+}
+.gc-live {
+  position: absolute; top: 10px; left: 10px; z-index: 2;
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(9,12,22,.62); backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,.1);
+  padding: 4px 9px; border-radius: 20px;
+  font-size: 10.5px; font-weight: 700; color: #dfe4ff;
+}
+.gc-live i { width: 7px; height: 7px; border-radius: 50%; background: #2dd882;
+  box-shadow: 0 0 8px #2dd882; animation: livedot 1.6s infinite; }
+@keyframes livedot { 50% { opacity: .35; } }
+.art-upgrade { background: radial-gradient(120% 100% at 50% 0%, #4a2c05 0%, #2a1a12 55%, #1b1424 100%); }
+.art-doors   { background: radial-gradient(120% 100% at 50% 0%, #3d2410 0%, #2b1c14 55%, #1a1424 100%); }
+.art-mines   { background: radial-gradient(120% 100% at 50% 0%, #2a3550 0%, #232a44 55%, #171a2c 100%); }
+.art-roulette{ background: radial-gradient(120% 100% at 50% 0%, #4c1430 0%, #331228 55%, #1c1024 100%); }
+.art-plinko  { background: radial-gradient(120% 100% at 50% 0%, #143a44 0%, #122a38 55%, #101b2c 100%); }
+.art-rocket  { background: radial-gradient(120% 100% at 50% 0%, #3a2470 0%, #2a1d52 55%, #171434 100%); }
+.art-cases   { background: radial-gradient(120% 100% at 50% 0%, #4a1c3a 0%, #331433 55%, #1b1028 100%); }
+
+/* --- кейсы: витрина --- */
+.case-grid2 { gap: 12px; }
+.case-card2 {
+  padding: 0; overflow: hidden; border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.1);
+  box-shadow: 0 12px 26px rgba(0,0,0,.4);
+}
+.cc2-img { height: 150px; border-radius: 0; }
+.cc2-art {
+  width: 104px; height: 104px; z-index: 1;
+  filter: drop-shadow(0 12px 20px rgba(0,0,0,.5));
+  transition: transform .25s ease;
+}
+.case-card2:active .cc2-art { transform: scale(1.08); }
+.cc2-foot {
+  padding: 12px 14px 13px; background: rgba(12,16,30,.72);
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+.cc2-name { font-size: 15px; }
+.cc2-price {
+  background: rgba(255,211,77,.12); color: #ffd34d;
+  border: 1px solid rgba(255,211,77,.25);
+  font-size: 12px; padding: 4px 10px; border-radius: 12px;
+}
+
+/* --- карточки подарков (как в Telegram-маркете) --- */
+.strip-item, .drop-card, .multi-item {
+  background: linear-gradient(165deg, #232a47 0%, #1a2036 55%, #151a2c 100%);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.07);
+  position: relative; overflow: hidden;
+}
+.strip-item {
+  flex: 0 0 112px; height: 156px; margin: 0 5px;
+  gap: 8px; justify-content: center;
+}
+.strip-item::after, .drop-card::after, .multi-item::after {
+  content: ''; position: absolute; top: -40%; left: -20%;
+  width: 140%; height: 80%;
+  background: radial-gradient(closest-side, rgba(255,255,255,.12), transparent);
+  pointer-events: none;
+}
+.strip-item .si-e { font-size: 48px; }
+.strip-item .si-n { font-size: 11px; color: #dfe4ff; }
+.drop-card {
+  padding: 14px 10px 12px; display: flex; flex-direction: column;
+  align-items: center; gap: 6px; text-align: center;
+}
+.drop-card .dc-e { font-size: 44px; filter: drop-shadow(0 8px 12px rgba(0,0,0,.45)); }
+.drop-card .dc-n { font-size: 12px; font-weight: 700; color: #e6e9ff; line-height: 1.25; }
+.drop-card .price-pill, .multi-item .price-pill {
+  background: rgba(255,211,77,.12); color: #ffd34d;
+  border: 1px solid rgba(255,211,77,.25); border-radius: 10px;
+  padding: 3px 9px; font-size: 11.5px; font-weight: 800;
+}
+.multi-item { padding: 12px 8px; }
+.multi-item .ie { font-size: 34px; }
+/* редкости: мягкая подсветка фона */
+.t-common, .d-common, .r-common { background: linear-gradient(165deg, #2a3150, #1a2036 60%, #151a2c); }
+.t-pink, .d-pink, .r-pink { background: linear-gradient(165deg, #6a2650, #3a1c3e 55%, #1a1428); }
+.t-red, .d-red, .r-red { background: linear-gradient(165deg, #6e1f30, #3c1828 55%, #1c1224); }
+.t-purple, .d-purple, .r-purple { background: linear-gradient(165deg, #4a2a7a, #2c1c52 55%, #16122c); }
+.t-blue, .d-blue, .r-blue { background: linear-gradient(165deg, #1e3a6e, #18284a 55%, #101a30); }
+.t-gold, .d-gold, .r-gold {
+  background: linear-gradient(165deg, #7a5410, #4a3010 55%, #221806);
+  border-color: rgba(255,211,77,.35);
+  box-shadow: 0 8px 20px rgba(255,179,32,.18), inset 0 1px 0 rgba(255,220,120,.25);
+}
+.market-ribbon {
+  position: absolute; top: 8px; left: 8px; z-index: 3;
+  background: linear-gradient(120deg, #2dd882, #1aa06a);
+  color: #04140c; font-size: 9px; font-weight: 900; letter-spacing: .4px;
+  padding: 3px 7px; border-radius: 8px;
+}
+.case-strip-wrap.tall { background: linear-gradient(180deg, rgba(9,12,22,.75), rgba(20,26,46,.55)); }
+
+/* --- Апгрейдер --- */
+.upg-wrap { padding-bottom: 12px; }
+.upg-gauge {
+  position: relative; width: 252px; height: 252px; margin: 10px auto 16px;
+  --win: 0deg;
+}
+.upg-ring {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(from -90deg, #2dd882 0deg var(--win), #262e4a var(--win) 360deg);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 20px), #000 calc(100% - 19px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 20px), #000 calc(100% - 19px));
+  transition: background .3s;
+  filter: drop-shadow(0 0 16px rgba(45,216,130,.2));
+}
+.upg-ticks {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: repeating-conic-gradient(from -90deg, rgba(255,255,255,.16) 0deg 1deg, transparent 1deg 15deg);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 30px), #000 calc(100% - 29px), #000 calc(100% - 20px), transparent calc(100% - 19px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 30px), #000 calc(100% - 29px), #000 calc(100% - 20px), transparent calc(100% - 19px));
+  opacity: .5;
+}
+.upg-arrow {
+  position: absolute; left: 50%; top: 50%;
+  width: 6px; height: 98px; margin-left: -3px; margin-top: -98px;
+  transform-origin: 50% 100%; transform: rotate(0deg);
+  transition: transform 2.8s cubic-bezier(.15,.85,.12,1);
+}
+.upg-arrow::before {
+  content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  border-left: 9px solid transparent; border-right: 9px solid transparent;
+  border-bottom: 20px solid #ffd34d;
+  filter: drop-shadow(0 0 6px rgba(255,211,77,.7));
+}
+.upg-arrow::after {
+  content: ''; position: absolute; bottom: 0; left: 0; width: 6px; height: 76px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #ffd34d, rgba(255,211,77,.1));
+}
+.upg-center {
+  position: absolute; inset: 52px; border-radius: 50%;
+  background: radial-gradient(circle at 50% 28%, #1e2744, #12172a 72%);
+  border: 1px solid #2b3350;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  box-shadow: inset 0 0 30px rgba(0,0,0,.5);
+}
+.upg-chance { font-size: 40px; font-weight: 900; letter-spacing: -1px;
+  background: linear-gradient(180deg, #fff, #a9b4e8); -webkit-background-clip: text;
+  background-clip: text; -webkit-text-fill-color: transparent; }
+.upg-chance-l { font-size: 11px; color: #8f97c4; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+.upg-selects { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.upg-panel {
+  flex: 1; background: rgba(255,255,255,.04); border: 1px solid #262e4a;
+  border-radius: 16px; padding: 10px 12px; min-width: 0;
+}
+.upg-p-title { font-size: 11px; color: #8f97c4; font-weight: 700; margin-bottom: 4px; }
+.upg-p-val { font-size: 16px; font-weight: 800; color: #fff; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis; }
+.upg-p-val b { color: #ffd34d; }
+.upg-sep { color: #6b74a8; font-weight: 900; font-size: 16px; }
+.upg-mults { display: flex; gap: 7px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 2px; }
+.upg-mult {
+  flex: 0 0 auto; background: rgba(255,255,255,.05); border: 1px solid #262e4a;
+  color: #cfd6ff; font-weight: 800; font-size: 13px; font-family: inherit;
+  padding: 9px 14px; border-radius: 14px; cursor: pointer; transition: all .15s;
+}
+.upg-mult.sel {
+  background: linear-gradient(120deg, #7b6bff, #5b46e0); color: #fff;
+  border-color: transparent; box-shadow: 0 6px 16px rgba(108,92,255,.35);
+}
+.upg-betrow { display: flex; gap: 8px; margin-bottom: 10px; align-items: stretch; }
+.upg-step {
+  width: 46px; border-radius: 14px; border: 1px solid #262e4a;
+  background: rgba(255,255,255,.05); color: #fff; font-size: 20px; font-weight: 800;
+  cursor: pointer; font-family: inherit;
+}
+.upg-step:active { background: rgba(255,255,255,.12); }
+.upg-input {
+  flex: 1; min-width: 0; background: #171c30; border: 1px solid #2b3350; color: #fff;
+  border-radius: 14px; padding: 12px; font-size: 17px; font-weight: 800;
+  text-align: center; outline: none; font-family: inherit;
+}
+.upg-input:focus { border-color: var(--accent); }
+.upg-max {
+  padding: 0 14px; border-radius: 14px; border: 1px solid rgba(255,211,77,.35);
+  background: rgba(255,211,77,.12); color: #ffd34d; font-weight: 900; font-size: 12px;
+  cursor: pointer; font-family: inherit;
+}
+.upg-quick { display: flex; gap: 7px; margin-bottom: 14px; }
+.upg-quick button {
+  flex: 1; background: rgba(255,255,255,.04); border: 1px solid #262e4a;
+  color: #cfd6ff; border-radius: 12px; padding: 8px 0; font-size: 12px;
+  font-weight: 700; font-family: inherit; cursor: pointer;
+}
+.upg-go {
+  width: 100%; padding: 17px; border: none; border-radius: 18px;
+  background: linear-gradient(120deg, #ffd34d, #ff9f1a);
+  color: #241a00; font-size: 17px; font-weight: 900; font-family: inherit;
+  box-shadow: 0 10px 26px rgba(255,159,26,.35), inset 0 1px 0 rgba(255,255,255,.4);
+  cursor: pointer; transition: transform .12s, filter .15s;
+}
+.upg-go:active { transform: scale(.97); filter: brightness(1.06); }
+.upg-go:disabled { opacity: .5; box-shadow: none; }
+.upg-go.green { background: linear-gradient(120deg, #2dd882, #1aa06a); color: #04140c;
+  box-shadow: 0 10px 26px rgba(45,216,130,.3), inset 0 1px 0 rgba(255,255,255,.35); }
+.upg-go.red { background: linear-gradient(120deg, #ff5b6e, #d1263c); color: #fff;
+  box-shadow: 0 10px 26px rgba(209,38,60,.3); }
+.upg-note { text-align: center; font-size: 11px; color: #7b84b3; margin-top: 10px; }
+
+/* --- полировка общих элементов --- */
+.screen-title { letter-spacing: -.3px; }
+.big-card {
+  border-radius: 20px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.btn-primary, .btn-bet {
+  background: linear-gradient(120deg, #7b6bff, #5b46e0);
+  box-shadow: 0 8px 20px rgba(108,92,255,.3), inset 0 1px 0 rgba(255,255,255,.25);
+  border: none; border-radius: 16px;
+}
+.btn-purple {
+  background: linear-gradient(120deg, #7b6bff, #5b46e0);
+  border-radius: 14px; font-weight: 800;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.22);
+}
+.chip-m, .btn-secondary {
+  border-radius: 14px; font-weight: 800;
+}
+/* доп. элементы карточек подарков */
+.strip-item .si-p { font-size: 11px; font-weight: 800; color: #ffd34d; }
+.multi-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.multi-item .mi-n { font-size: 10px; color: #cfd6ff; text-align: center; line-height: 1.2; }
