@@ -33,7 +33,7 @@ Games.cases = (() => {
     book: G('📕', 'Книга', 530, true),
     monkey: G('🐒', 'Обезьяна', 734, true),
     dog: G('🐕', 'Пёс-рэпер', 536, true),
-    poop: G('💩', 'Какашка', 536, true),
+    cyl: G('🎩', 'Цилиндр', 536, true),
     moon: G('🌙', 'Полумесяц', 536, true),
     berry: G('🍰', 'Вишнёвый торт', 534, true),
     easter: G('🐣', 'Пасхальная корзина', 536, true),
@@ -136,8 +136,8 @@ Games.cases = (() => {
   function stripItemHTML(g) {
     return '<div class="strip-item t-' + tier(g) + '">' + ribbon(g) +
       '<span class="si-e">' + g.e + '</span>' +
-      '<span class="si-n">' + g.n + '</span>' +
-      '<span class="si-p">★ ' + g.v + '</span></div>';
+      '<div class="ginfo"><div class="gn">' + g.n + '</div>' +
+      '<div class="gp"><i>★</i> ' + g.v + '</div></div></div>';
   }
 
   /* цветовая тема предмета по редкости */
@@ -164,8 +164,8 @@ Games.cases = (() => {
       '<div class="drop-card d-' + tier(g) + '" style="animation-delay:' + (i * 0.04) + 's">' +
       ribbon(g) +
       '<span class="dc-e">' + g.e + '</span>' +
-      '<span class="dc-n">' + g.n + '</span>' +
-      '<span class="price-pill">★ ' + g.v + '</span></div>').join('');
+      '<div class="ginfo"><div class="gn">' + g.n + '</div>' +
+      '<div class="gp"><i>★</i> ' + g.v + '</div></div></div>').join('');
   }
 
   function roll(c) {
@@ -247,8 +247,8 @@ Games.cases = (() => {
         '<div class="result-card">' +
         '<div class="drop-card d-' + tier(g) + '">' + ribbon(g) +
         '<span class="dc-e">' + g.e + '</span>' +
-        '<span class="dc-n">' + g.n + '</span>' +
-        '<span class="price-pill">★ ' + g.v + '</span></div></div>' +
+        '<div class="ginfo"><div class="gn">' + g.n + '</div>' +
+        '<div class="gp"><i>★</i> ' + g.v + '</div></div></div></div>' +
         '<div class="rc-actions">' +
         '<button class="rc-btn rc-sell">Продать ★ ' + g.v + '</button>' +
         '<button class="rc-btn rc-keep">🎒 В инвентарь</button>' +
@@ -273,8 +273,8 @@ Games.cases = (() => {
         prizes.map((g, i) =>
           '<div class="multi-item d-' + tier(g) + '" style="animation-delay:' + (i * 0.08) + 's">' +
           ribbon(g) + '<span class="ie">' + g.e + '</span>' +
-          '<span class="mi-n">' + g.n + '</span>' +
-          '<span class="price-pill">★ ' + g.v + '</span></div>').join('') +
+          '<div class="ginfo"><div class="gn">' + g.n + '</div>' +
+          '<div class="gp"><i>★</i> ' + g.v + '</div></div>').join('') +
         '</div>' +
         '<div class="rc-actions">' +
         '<button class="rc-btn rc-sell">Продать всё ★ ' + sum + '</button>' +
