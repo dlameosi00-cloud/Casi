@@ -136,7 +136,8 @@ Games.cases = (() => {
   function stripItemHTML(g) {
     return '<div class="strip-item t-' + tier(g) + '">' + ribbon(g) +
       '<span class="si-e">' + g.e + '</span>' +
-      '<span class="si-n">' + g.n + '</span></div>';
+      '<span class="si-n">' + g.n + '</span>' +
+      '<span class="si-p">★ ' + g.v + '</span></div>';
   }
 
   /* цветовая тема предмета по редкости */
@@ -213,7 +214,8 @@ Games.cases = (() => {
     for (let i = 0; i < 60; i++) strip.insertAdjacentHTML('beforeend', stripItemHTML(roll(c)));
     strip.children[52].outerHTML = stripItemHTML(prizes[0]);
 
-    const itemW = 118;
+    const itemW = strip.firstElementChild
+      ? strip.firstElementChild.getBoundingClientRect().width + 10 : 122;
     const wrap = strip.parentElement;
     const jitter = (Math.random() - 0.5) * 40;
     const target = wrap.clientWidth / 2 - (52 * itemW + 59) + jitter;
@@ -271,6 +273,7 @@ Games.cases = (() => {
         prizes.map((g, i) =>
           '<div class="multi-item d-' + tier(g) + '" style="animation-delay:' + (i * 0.08) + 's">' +
           ribbon(g) + '<span class="ie">' + g.e + '</span>' +
+          '<span class="mi-n">' + g.n + '</span>' +
           '<span class="price-pill">★ ' + g.v + '</span></div>').join('') +
         '</div>' +
         '<div class="rc-actions">' +
