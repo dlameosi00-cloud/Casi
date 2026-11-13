@@ -1618,3 +1618,145 @@ body {
 .strip-item .si-p { font-size: 11px; font-weight: 800; color: #ffd34d; }
 .multi-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .multi-item .mi-n { font-size: 10px; color: #cfd6ff; text-align: center; line-height: 1.2; }
+
+/* === UPGRADE 16 · v5: арты игр, подарки как в Telegram, Апгрейдер v2 === */
+
+/* карточки игр: арт целиком по центру, имя внизу на затемнении, лучи на фоне */
+.game-card { min-height: 0; aspect-ratio: 1 / 1.06; }
+.gc-art { inset: 9% 8% 31%; }
+.gc-art .gart { width: 100%; height: 100%; max-width: 104px; max-height: 104px; }
+.game-card::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; top: auto;
+  width: auto; height: 48%;
+  background: linear-gradient(180deg, transparent, rgba(8,11,22,.68));
+  border-radius: 0 0 21px 21px; pointer-events: none;
+}
+.gc-name2 { position: absolute; left: 14px; bottom: 11px; right: 14px; z-index: 3; }
+.art-upgrade { background:
+  radial-gradient(80% 60% at 50% 36%, rgba(255,196,80,.3), transparent 62%),
+  repeating-conic-gradient(from 8deg at 50% 38%, rgba(255,210,120,.08) 0 9deg, rgba(255,210,120,0) 9deg 20deg),
+  radial-gradient(130% 110% at 50% 0%, #453014 0%, #241a12 55%, #14101c 100%); }
+.art-mines { background:
+  radial-gradient(80% 60% at 50% 36%, rgba(150,180,255,.2), transparent 62%),
+  repeating-conic-gradient(from 4deg at 50% 38%, rgba(190,210,255,.07) 0 9deg, rgba(190,210,255,0) 9deg 20deg),
+  radial-gradient(130% 110% at 50% 0%, #2a3560 0%, #20263e 55%, #131728 100%); }
+.art-roulette { background:
+  radial-gradient(80% 60% at 50% 36%, rgba(90,220,150,.18), transparent 62%),
+  repeating-conic-gradient(from 12deg at 50% 38%, rgba(200,255,220,.06) 0 9deg, rgba(200,255,220,0) 9deg 20deg),
+  radial-gradient(130% 110% at 50% 0%, #17452c 0%, #102e1e 55%, #0a1a12 100%); }
+.art-plinko { background:
+  radial-gradient(80% 60% at 50% 36%, rgba(140,160,255,.18), transparent 62%),
+  repeating-conic-gradient(from 2deg at 50% 38%, rgba(200,215,255,.06) 0 9deg, rgba(200,215,255,0) 9deg 20deg),
+  radial-gradient(130% 110% at 50% 0%, #26306a 0%, #1a2148 55%, #101436 100%); }
+.art-rocket { background:
+  radial-gradient(80% 60% at 50% 36%, rgba(255,160,70,.24), transparent 62%),
+  repeating-conic-gradient(from 6deg at 50% 38%, rgba(255,190,110,.07) 0 9deg, rgba(255,190,110,0) 9deg 20deg),
+  radial-gradient(130% 110% at 50% 0%, #4a2a14 0%, #331c10 55%, #180f0c 100%); }
+.art-doors { background:
+  radial-gradient(80% 60% at 50% 36%, rgba(255,200,110,.2), transparent 62%),
+  repeating-conic-gradient(from 10deg at 50% 38%, rgba(255,225,160,.06) 0 9deg, rgba(255,225,160,0) 9deg 20deg),
+  radial-gradient(130% 110% at 50% 0%, #4a3018 0%, #331f10 55%, #17100e 100%); }
+.art-cases { background:
+  radial-gradient(80% 60% at 50% 36%, rgba(255,110,210,.2), transparent 62%),
+  repeating-conic-gradient(from 0deg at 50% 38%, rgba(255,160,230,.06) 0 9deg, rgba(255,160,230,0) 9deg 20deg),
+  radial-gradient(130% 110% at 50% 0%, #451a3a 0%, #2e142e 55%, #150e22 100%); }
+
+/* подарки: карточки Telegram — грифельно-синий фон, арт сверху, имя и цена слева внизу */
+.strip-item, .drop-card, .multi-item {
+  background: linear-gradient(170deg, #4d5779 0%, #3c4463 48%, #313956 100%);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 20px;
+  box-shadow: 0 10px 22px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.16), inset 0 -18px 28px rgba(0,0,0,.16);
+}
+.t-common, .d-common, .r-common,
+.t-pink, .d-pink, .r-pink,
+.t-red, .d-red, .r-red,
+.t-purple, .d-purple, .r-purple,
+.t-blue, .d-blue, .r-blue {
+  background: linear-gradient(170deg, #4d5779 0%, #3c4463 48%, #313956 100%);
+}
+.t-gold, .d-gold, .r-gold {
+  background: linear-gradient(170deg, #6f5c30 0%, #4e4122 48%, #2c2412 100%);
+  border-color: rgba(255,211,77,.45);
+  box-shadow: 0 10px 24px rgba(255,179,32,.22), inset 0 1px 0 rgba(255,230,150,.3), inset 0 -18px 28px rgba(0,0,0,.2);
+}
+.drop-card { display: flex; flex-direction: column; padding: 12px; }
+.drop-card .dc-e { font-size: 46px; text-align: center; margin: 6px auto 20px; }
+.strip-item {
+  display: flex; flex-direction: column; padding: 10px 10px 12px;
+  justify-content: flex-start; gap: 0;
+}
+.strip-item .si-e { font-size: 44px; text-align: center; margin: 10px auto 16px; }
+.multi-item { display: flex; flex-direction: column; align-items: stretch; padding: 10px 10px 12px; gap: 0; }
+.multi-item .ie { font-size: 34px; text-align: center; margin: 6px auto 14px; }
+.ginfo { text-align: left; padding: 0 2px; margin-top: auto; position: relative; z-index: 2; }
+.gn {
+  font-size: 13.5px; font-weight: 800; color: #fff; line-height: 1.2;
+  text-shadow: 0 1px 6px rgba(0,0,0,.45);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.gp { font-size: 17px; font-weight: 900; color: #fff; display: flex; align-items: center; gap: 5px; margin-top: 3px; }
+.gp i { font-style: normal; color: #ffb020; font-size: 14px; }
+.result-card .drop-card { width: 180px; margin: 0 auto; }
+.result-card .drop-card .dc-e { font-size: 54px; }
+
+/* Апгрейдер v2: толстое тёмное кольцо, зелёный сектор по центру снизу */
+.upg-gauge {
+  width: 250px; height: 250px; margin: 12px auto 10px;
+  --ws: 180deg; --we: 180deg;
+}
+.upg-gauge::before {
+  content: ''; position: absolute; inset: 0; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.07);
+  box-shadow: 0 14px 34px rgba(0,0,0,.42);
+}
+.upg-ring {
+  background:
+    conic-gradient(from -90deg,
+      #20263c 0deg var(--ws),
+      #2dd882 var(--ws) var(--we),
+      #20263c var(--we) 360deg);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 27px), #000 calc(100% - 26px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 27px), #000 calc(100% - 26px));
+  filter: drop-shadow(0 0 16px rgba(45,216,130,.16));
+  transition: background .25s;
+}
+.upg-ticks {
+  opacity: .35;
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 36px), #000 calc(100% - 35px), #000 calc(100% - 28px), transparent calc(100% - 27px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 36px), #000 calc(100% - 35px), #000 calc(100% - 28px), transparent calc(100% - 27px));
+}
+.upg-arrow { width: 5px; height: 104px; margin-left: -2.5px; margin-top: -104px; }
+.upg-arrow::before {
+  border-left: 8px solid transparent; border-right: 8px solid transparent;
+  border-bottom: 18px solid #ffd34d; top: -14px;
+  filter: drop-shadow(0 0 8px rgba(255,211,77,.8));
+}
+.upg-arrow::after {
+  width: 5px; height: 84px;
+  background: linear-gradient(180deg, rgba(255,211,77,.95), rgba(255,211,77,.04));
+}
+.upg-center {
+  inset: 58px;
+  background: radial-gradient(circle at 50% 30%, #20263f, #12172a 75%);
+  border: 1px solid #2b3350;
+}
+.upg-c-val { font-size: 28px; font-weight: 900; color: #fff; }
+.upg-c-val b {
+  background: linear-gradient(180deg, #fff, #ffd34d);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.upg-c-l {
+  font-size: 10px; font-weight: 800; letter-spacing: 2.4px;
+  color: #8f97c4; text-transform: uppercase; margin-top: 3px;
+}
+.upg-chancerow {
+  display: flex; align-items: baseline; justify-content: center; gap: 10px;
+  margin-bottom: 14px;
+}
+.upg-chance {
+  font-size: 30px; font-weight: 900; letter-spacing: -1px;
+  background: linear-gradient(180deg, #fff, #a9b4e8);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.upg-chancerow .upg-chance-l { font-size: 12px; }
