@@ -1294,3 +1294,56 @@ body {
   width: 100%; background: rgba(255,255,255,.06); border: 1px solid #2b3350;
   color: var(--dim); border-radius: 14px; padding: 13px; font-weight: 700; cursor: pointer;
 }
+
+/* ===== UPGRADE 14: вывод, кастом-пополнение, SVG-иконки ===== */
+.btn-outline {
+  background: transparent; color: #cfc8ff; border: 1px solid var(--accent);
+  padding: 7px 10px; border-radius: 18px; font-weight: 700; font-size: 11px;
+  cursor: pointer; transition: background .15s, transform .1s;
+}
+.btn-outline:active { background: rgba(108,92,255,.25); transform: scale(.96); }
+
+.logo-ic, .star-ic { width: 15px; height: 15px; fill: #ffcf4d; }
+.logo { display: flex; align-items: center; gap: 6px; }
+.star { display: flex; align-items: center; }
+
+.av-ic { width: 55%; height: 55%; fill: none; stroke: #fff; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round; }
+
+.chip-ic { width: 14px; height: 14px; fill: #ffcf4d; stroke: none;
+  display: block; margin: 0 auto; }
+
+.fn-ic { width: 14px; height: 14px; fill: none; stroke: #8f88c9; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round; vertical-align: -2px; margin-right: 5px; }
+
+.ilock svg { width: 11px; height: 11px; fill: none; stroke: #fff; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round; display: block; }
+
+.wd-input-row { display: flex; gap: 8px; margin: 12px 0; }
+.wd-input {
+  flex: 1; min-width: 0; background: #171c30; border: 1px solid #2b3350; color: #fff;
+  border-radius: 12px; padding: 12px 14px; font-size: 16px; font-weight: 700;
+  outline: none; font-family: inherit;
+}
+.wd-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(108,92,255,.2); }
+.wd-input::placeholder { color: #5b628a; font-weight: 500; font-size: 13px; }
+
+.wd-submit { width: 100%; margin-bottom: 10px; }
+.wd-primary { background: linear-gradient(120deg, #2dd882, #1aa06a) !important;
+  box-shadow: 0 4px 14px rgba(45,216,130,.25) !important; }
+
+.wd-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.wd-row {
+  display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.04);
+  border: 1px solid #262d49; border-radius: 12px; padding: 10px 12px;
+  animation: wdslide .25s ease both;
+}
+@keyframes wdslide { from { opacity: 0; transform: translateY(6px); } }
+.wd-amount { font-weight: 800; color: #ffcf4d; font-size: 15px; }
+.wd-date { font-size: 11px; color: var(--dim); margin-top: 2px; }
+.wd-status {
+  margin-left: auto; font-size: 11px; font-weight: 700; padding: 5px 10px;
+  border-radius: 10px; background: rgba(255,176,32,.15); color: #ffb020;
+  white-space: nowrap;
+}
+.wd-empty { color: var(--dim); font-size: 13px; padding: 6px 0; }
