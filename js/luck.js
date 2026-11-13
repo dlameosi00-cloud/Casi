@@ -14,26 +14,26 @@ const Luck = {
     const won = s.won || 0;
 
     /* базовый RTP казино */
-    let rtp = 0.88;
+    let rtp = 0.78;
 
     /* адаптация под игрока: в минусе у казино — чуть мягче, в плюсе — жёстче */
     const deficit = staked - won; /* >0 = казино в плюсе */
     const rel = staked > 0 ? deficit / staked : 0; /* [-1..1] */
-    rtp += Math.max(-0.3, Math.min(0.12, rel * 0.4));
+    rtp += Math.max(-0.2, Math.min(0.06, rel * 0.5));
 
-    /* первые 3 игры сессии — мягкие, дальше постепенно жёстче */
+    /* первые 2 игры сессии — чуть мягче, дальше быстро жёстче */
     const games = Store.session.games || 0;
-    if (games < 3) rtp += 0.15;
-    else if (games > 8) rtp -= Math.min(0.18, (games - 8) * 0.018);
+    if (games < 2) rtp += 0.08;
+    else if (games > 6) rtp -= Math.min(0.25, (games - 6) * 0.022);
 
     /* крупные ставки — заметно жёстче */
     const avg = Store.session.avgBet || bet;
-    if (bet >= avg * 3 || bet >= Store.balance * 0.35) rtp -= 0.22;
-    if (bet >= 300) rtp -= 0.08;
-    if (bet >= 1000) rtp -= 0.05;
+    if (bet >= avg * 3 || bet >= Store.balance * 0.35) rtp -= 0.28;
+    if (bet >= 300) rtp -= 0.12;
+    if (bet >= 1000) rtp -= 0.08;
 
     const f = rtp / 0.9;
-    return Math.max(0.42, Math.min(1.25, f));
+    return Math.max(0.35, Math.min(1.0, f));
   },
 
   /* шанс выигрыша по базовой вероятности */
