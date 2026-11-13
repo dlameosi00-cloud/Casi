@@ -61,27 +61,72 @@ modal.querySelectorAll('[data-amt]').forEach(b =>
   b.addEventListener('click', () => {
     const amount = +b.dataset.amt;
     modal.classList.add('hidden');
-    fetch(API_URL + '/api/deposit', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ initData: Store.tg.initData, amount })
-    }).then(r => r.json()).then(d => {
-      if (!d.ok) return Store.toast('Ошибка: ' + (d.error || 'попробуй позже'));
-      if (Store.tg.openInvoice) {
-        Store.tg.openInvoice(d.url);
-        if (Store.tg.onEvent) {
-          Store.tg.onEvent('invoiceClosed', ev => {
-            if (ev.status === 'paid') {
-              Store.toast('✅ Оплачено! Баланс обновляется...');
-              setTimeout(() => Store.sync(), 1500);
-            }
-          });
-        }
-      } else {
-        Store.tg.openTelegramLink(d.url);
-      }
-    }).catch(() => Store.toast('Ошибка соединения'));
+    requestDeposit(amount);
   }));
+
+/* кастомная сумма пополнения (10–1000) */
+function requestDeposit(amount) {
+  fetch(API_URL + '/api/deposit', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ initData: Store.tg.initData, amount })
+  }).then(r => r.json()).then(d => {
+    if (!d.ok) return Store.toast('Ошибка: ' + (d.error || 'попробуй позже'));
+    if (Store.tg.openInvoice) {
+      Store.tg.openInvoice(d.url);
+      if (Store.tg.onEvent) {
+        Store.tg.onEvent('invoiceClosed', ev => {
+          if (ev.status === 'paid') {
+            Store.toast('Оплачено! Баланс обновляется...');
+            setTimeout(() => Store.sync(), 1500);
+          }
+        });
+      }
+    } else {
+      Store.tg.openTelegramLink(d.url);
+    }
+  }).catch(() => Store.toast('Ошибка соединения'));
+}
+const depInput = document.getElementById('dep-amount');
+document.getElementById('dep-custom').addEventListener('click', () => {
+  const v = Math.floor(+depInput.value || 0);
+  if (v < 10) return Store.toast('Минимум пополнения — 10 ★');
+  if (v > 1000) return Store.toast('Максимум пополнения — 1000 ★');
+  modal.classList.add('hidden');
+  requestDeposit(v);
+});
+
+/* ---------- вывод звёзд ---------- */
+const wmodal = document.getElementById('withdraw-modal');
+function openWithdraw() {
+  if (!(Store.tg && Store.tg.initData)) {
+    return Store.toast('Открой мини-апп через бота, чтобы вывести');
+  }
+  if (!API_URL) {
+    return Store.toast('Вывод заработает после подключения бота');
+  }
+  if (Store.demoMode) return Store.toast('В демо-режиме вывод недоступен');
+  document.getElementById('wd-amount').value = '';
+  wmodal.classList.remove('hidden');
+}
+const bw = document.getElementById('btn-withdraw');
+if (bw) bw.addEventListener('click', openWithdraw);
+['btn-withdraw-2', 'btn-withdraw-3'].forEach(id => {
+  const b = document.getElementById(id);
+  if (b) b.addEventListener('click', openWithdraw);
+});
+document.getElementById('withdraw-close').addEventListener('click', () =>
+  wmodal.classList.add('hidden'));
+wmodal.querySelectorAll('[data-wamt]').forEach(b =>
+  b.addEventListener('click', () => {
+    const inp = document.getElementById('wd-amount');
+    inp.value = b.dataset.wamt === 'max' ? Store.balance : b.dataset.wamt;
+  }));
+document.getElementById('wd-submit').addEventListener('click', () => {
+  const v = document.getElementById('wd-amount').value;
+  wmodal.classList.add('hidden');
+  Store.requestWithdraw(v);
+});
 document.getElementById('btn-demo-toggle').addEventListener('click', () => Store.toggleDemo());
 document.getElementById('promo-btn').addEventListener('click', () =>
   Store.usePromo(document.getElementById('promo-input').value));
